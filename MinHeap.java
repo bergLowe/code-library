@@ -69,6 +69,31 @@ public class MinHeap {
         }
     }
 
+    private void buildMinHeap () {
+        for (int i = (this.size - 1) / 2; i >= 0; i--) {
+            minHeap(i);
+        }
+    }
+
+    private void minHeap (int index) {
+        int left = getLeftChildIndex(index);
+        int right = getRightChildIndex(index);
+        int smallest = index;
+
+        if (left < this.size && items[left] < items[smallest]) {
+            smallest = left;
+        }
+
+        if (right < this.size && items[right] < items[smallest]) {
+            smallest = right;
+        }
+
+        if (smallest != index) {
+            swap(smallest, index);
+            minHeap(smallest);
+        }
+    }
+
     public int peek () {
         if (this.size == 0) throw new IllegalStateException();
         return items[0];
@@ -88,6 +113,25 @@ public class MinHeap {
         items[this.size] = item;
         this.size += 1;
         heapifyUp();
+    }
+
+    public void remove (int item) {
+        // Remove a particular element
+        int itemIndex = -1;
+
+        for (int i = 0; i < size; i++) {
+            if (items[i] == item) {
+                itemIndex = i;
+                break;
+            }
+        }
+        
+        if (itemIndex == -1) return ;
+
+        swap(itemIndex, this.size - 1);
+        this.size -= 1;
+        
+        buildMinHeap();
     }
 
     public int getSize() {
